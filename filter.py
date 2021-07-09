@@ -1,23 +1,33 @@
 from confluent_kafka import Consumer
+from confluent_kafka import Producer
 
 
-c = Consumer({
-    'bootstrap.servers': 'localhost:9092',
+host = 'localhost:9092'
+
+producer = Producer({'bootstrap.servers': host})
+
+consumer = Consumer({
+    'bootstrap.servers': host,
     'group.id': 'listener',
     'auto.offset.reset': 'earliest',
 })
 
-c.subscribe(['registrations'])
+consumer.subscribe(['registrations'])
 
 while True:
-    msg = c.poll(1.0)
+    msg = consumer.poll(1.0)
 
     if msg is None:
         continue
     if msg.error():
-        print("Consumer error: {}".format(msg.error()))
+        print(f"Consumer error: {msg.error()}")
         continue
 
-    print('Received message: {}'.format(msg.value().decode('utf-8')))
+    data = msg.value().decode("utf-8")
+    new_data = f"New {data}"
 
-c.close()
+    producer.produce('filtred', new_data.encode())
+    producer.flush()
+    print(f'Received message: {msg.value().decode("utf-8")}')
+
+consumer.close()
