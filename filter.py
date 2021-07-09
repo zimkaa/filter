@@ -1,16 +1,16 @@
 from confluent_kafka import Consumer
 
 
-c = Consumer({
+consumer = Consumer({
     'bootstrap.servers': 'localhost:9092',
     'group.id': 'listener',
     'auto.offset.reset': 'earliest',
 })
 
-c.subscribe(['registrations'])
+consumer.subscribe(['registrations'])
 
 while True:
-    msg = c.poll(1.0)
+    msg = consumer.poll(1.0)
 
     if msg is None:
         continue
@@ -20,4 +20,4 @@ while True:
 
     print('Received message: {}'.format(msg.value().decode('utf-8')))
 
-c.close()
+consumer.close()
