@@ -8,11 +8,11 @@ producer = Producer({'bootstrap.servers': host})
 
 consumer = Consumer({
     'bootstrap.servers': host,
-    'group.id': 'listener',
+    'group.id': 'listener_events',
     'auto.offset.reset': 'earliest',
 })
 
-consumer.subscribe(['registrations'])
+consumer.subscribe(['events'])
 
 while True:
     msg = consumer.poll(1.0)
