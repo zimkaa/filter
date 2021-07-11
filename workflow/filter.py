@@ -1,13 +1,13 @@
 from confluent_kafka import Consumer
 from confluent_kafka import Producer
 
+import config
 
-host = 'localhost:9092'
 
-producer = Producer({'bootstrap.servers': host})
+producer = Producer({'bootstrap.servers': config.HOST})
 
 consumer = Consumer({
-    'bootstrap.servers': host,
+    'bootstrap.servers': config.HOST,
     'group.id': 'listener_events',
     'auto.offset.reset': 'earliest',
 })
