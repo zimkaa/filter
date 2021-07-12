@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myfilter
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myfilter
+  template:
+    metadata:
+      name: myfilter
+      labels:
+        app: myfilter
+    spec:
+      containers:
+      - name : filter
+        image: myapp2
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 9092
+          protocol: TCP
+        env:
+        - name: HOST
+          valueFrom:
+            secretKeyRef:
+              name: myapp
+              key: HOST
+        resources:
+          limits:
+            cpu: 300m
+            memory: 20Mi
+          requests:
+            cpu: 200m
+            memory: 10Mi
