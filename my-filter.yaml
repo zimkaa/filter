@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: myfilter
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: myfilter
@@ -17,15 +17,9 @@ spec:
       - name : filter
         image: myapp2
         imagePullPolicy: Never
-        ports:
-        - containerPort: 9092
-          protocol: TCP
         env:
         - name: HOST
-          valueFrom:
-            secretKeyRef:
-              name: myapp
-              key: HOST
+          value: "kafka.kafka-ca1"
         resources:
           limits:
             cpu: 300m

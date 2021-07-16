@@ -27,15 +27,18 @@ def main():
             continue
 
         data = msg.value().decode("utf-8")
-        filtred_data_json = json.loads(data)
 
-        bitcoin = {'bitcoin': filtred_data_json['bitcoin']}
-        ethereum = {'ethereum': filtred_data_json['ethereum']}
+        tikers = config.TIKERS.split(',')
 
-        producer.produce('filtred', json.dumps(ethereum).encode())
-        producer.produce('filtred', json.dumps(bitcoin).encode())
-        
-        producer.flush()
+        for tiker in tikers:
+            try:
+                my_filter = json.loads(data)[tiker]
+                write_data = {tiker: my_filter}
+                producer.produce('filtred', json.dumps(write_data).encode())
+                producer.flush()
+            except KeyError:
+                print("No ticker in data")
+                continue
 
 
 if __name__ == "__main__":
