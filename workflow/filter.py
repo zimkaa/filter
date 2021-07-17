@@ -31,14 +31,9 @@ def main():
         tikers = config.TIKERS.split(',')
 
         for tiker in tikers:
-            try:
-                my_filter = json.loads(data)[tiker]
-                write_data = {tiker: my_filter}
-                producer.produce('filtred', json.dumps(write_data).encode())
+            if json.loads(data)['name'] == tiker:
+                producer.produce('filtred', data.encode())
                 producer.flush()
-            except KeyError:
-                print("No ticker in data")
-                continue
 
 
 if __name__ == "__main__":
