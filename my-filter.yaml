@@ -20,6 +20,8 @@ spec:
         env:
         - name: HOST
           value: "kafka.kafka-ca1"
+        - name: TIKERS
+          value: "bitcoin,ethereum"
         resources:
           limits:
             cpu: 300m
