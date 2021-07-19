@@ -17,6 +17,8 @@ def main():
 
     consumer.subscribe(['events'])
 
+    tikers = config.TIKERS.split(',')
+
     while True:
         msg = consumer.poll(1.0)
 
@@ -28,11 +30,9 @@ def main():
 
         data = msg.value().decode("utf-8")
 
-        tikers = config.TIKERS.split(',')
-
         for tiker in tikers:
             if json.loads(data)['name'] == tiker:
-                producer.produce('filtred', data.encode())
+                producer.produce('filtred', msg.value())
                 producer.flush()
 
 
